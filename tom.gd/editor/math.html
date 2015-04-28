@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="https://cdn.firebase.com/js/client/2.0.2/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firepad/1.1.0/firepad.min.js"></script>
+    <style>html,body{height:100%;width:100%};
+    </style>
+</head>
+<body>
+    <div style="height: 100%" id="math"></div>
+
+    <script>
+    function init() {
+      MathJax.Hub.Config({});
+      firebase = getRef();
+      getAndUpdateMath();
+      setInterval(getAndUpdateMath, 1000);
+  }
+
+  function getAndUpdateMath() {
+      var headless = new Firepad.Headless(firebase);
+      headless.getText(updateMath);
+  }
+
+  oldmath = '';
+  function updateMath(math) {
+      if (math == oldmath) { return; }
+      oldmath = math;
+      document.getElementById('math').textContent = math;
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('math')]);
+  }
+
+  function getRef() {
+      var ref = new Firebase('https://blinding-torch-9002.firebaseio.com/');
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+    } else {
+        ref = ref.push();
+        window.location = window.location + '#' + ref.key();
+    }
+    return ref;
+}
+
+window.onload = init;
+</script>
+</body>
+</html>

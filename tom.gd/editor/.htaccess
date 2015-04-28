@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteRule ^e(ditor)?\/?$ e.php
+RewriteRule ^e(ditor)?\.([a-z]+)$ edit.html?mode=$2
+RewriteRule ^m(ath)?\/?$ math.html
+RewriteRule ^e(dit)?-?m(ath)?$ edit-math.html
