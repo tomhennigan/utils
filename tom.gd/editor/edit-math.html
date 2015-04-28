@@ -1,0 +1,36 @@
+
+<html>
+<head>
+<style>html,body{height:100%;margin:0;padding:0;}iframe{display:block;width:100%;height:50%;}</style>
+</head>
+<body>
+<script src="https://cdn.firebase.com/js/client/2.0.2/firebase.js"></script>
+<script type="text/javascript">
+function addFrames() {
+    var iframe = document.createElement('iframe');
+    iframe.src = '/math' + getHash();
+    document.body.appendChild(iframe);
+
+    iframe = document.createElement('iframe');
+    iframe.src = '/e' + getHash();
+    document.body.appendChild(iframe);
+}
+
+function getHash() {
+  var ref = new Firebase('https://blinding-torch-9002.firebaseio.com/');
+  var hash = window.location.hash.replace(/#/g, '');
+  if (hash) {
+    ref = ref.child(hash);
+  } else {
+    ref = ref.push(); // generate unique location.
+    window.location = window.location + '#' + ref.key(); // add it as a hash to the URL.
+  }
+  if (typeof console !== 'undefined')
+    console.log('Firebase data: ', ref.toString());
+  return window.location.hash;
+}
+
+addFrames();
+</script>
+</body>
+</html>
