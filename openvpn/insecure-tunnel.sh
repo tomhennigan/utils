@@ -27,14 +27,14 @@ function provision() {
 	docker run --volumes-from ovpn-data --rm kylemanna/openvpn ovpn_genconfig -u "udp://${EXTERNAL_IP}:1194"
 	docker run --volumes-from ovpn-data --rm -it kylemanna/openvpn ovpn_initpki
 	cat > /etc/init/docker-openvpn.conf << __EOF
-	description "Docker container for OpenVPN server"
-	start on filesystem and started docker
-	stop on runlevel [!2345]
-	respawn
-	script
-	  exec docker run --volumes-from ovpn-data --rm -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
-	end script
-	__EOF
+description "Docker container for OpenVPN server"
+start on filesystem and started docker
+stop on runlevel [!2345]
+respawn
+script
+  exec docker run --volumes-from ovpn-data --rm -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
+end script
+__EOF
 	sudo start docker-openvpn
 }
 
